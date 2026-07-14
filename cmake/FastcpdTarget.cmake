@@ -1,11 +1,10 @@
 include_guard(GLOBAL)
 
-get_filename_component(_fastcpd_standalone_dir
+get_filename_component(_fastcpd_root_dir
   "${CMAKE_CURRENT_LIST_DIR}/.." ABSOLUTE)
-get_filename_component(_fastcpd_src_dir
-  "${_fastcpd_standalone_dir}/.." ABSOLUTE)
+set(_fastcpd_src_dir "${_fastcpd_root_dir}/src")
 
-add_library(fastcpd "${_fastcpd_standalone_dir}/fastcpd.cc")
+add_library(fastcpd "${_fastcpd_root_dir}/cpp/fastcpd.cc")
 add_library(fastcpd::fastcpd ALIAS fastcpd)
 
 set_target_properties(fastcpd PROPERTIES POSITION_INDEPENDENT_CODE ON)
@@ -13,7 +12,7 @@ target_compile_features(fastcpd PUBLIC cxx_std_17)
 target_compile_definitions(fastcpd PRIVATE NO_RCPP)
 target_include_directories(fastcpd
   PUBLIC
-    $<BUILD_INTERFACE:${_fastcpd_standalone_dir}/include>
+    $<BUILD_INTERFACE:${_fastcpd_root_dir}/include>
     $<BUILD_INTERFACE:${FASTCPD_ARMADILLO_INCLUDE_DIR}>
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
   PRIVATE
@@ -36,4 +35,4 @@ target_link_libraries(fastcpd PRIVATE
   absl::prefetch)
 
 unset(_fastcpd_src_dir)
-unset(_fastcpd_standalone_dir)
+unset(_fastcpd_root_dir)
